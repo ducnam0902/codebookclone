@@ -1,13 +1,33 @@
-import { useState } from 'react';
-import { ProductCard } from '../../components/Elements/ProductCard';
+import { useEffect, useState } from 'react';
+import { ProductCard } from '../../components';
 import { FilterBar } from '../../pages/Products/components/FilterBar';
+import { useLocation } from 'react-router-dom';
+import useTitle from '../../hooks/useTitle';
+import { useFilter } from '../../context/FilterContext';
+
 export const ProductsList = () => {
   const [show, setShow] = useState(false);
+  const [products, setProducts] = useState([]);
+  const search = useLocation().search;
+  const searchTerm = new URLSearchParams(search).get('q');
+  useTitle('Explore eBooks Collection');
+  const { productList } = useFilter();
+  console.log(productList);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const response = await fetch(`http://localhost:3000/products?name_like=${searchTerm ? searchTerm : ''}`);
+      const data = await response.json();
+      setProducts(data);
+    }
+    fetchProducts();
+  }, [searchTerm]);
+
   return (
     <main>
       <section className="my-5">
         <div className="my-5 flex justify-between">
-          <span className="text-2xl font-semibold dark:text-slate-100 mb-5">All eBooks (15)</span>
+          <span className="text-2xl font-semibold dark:text-slate-100 mb-5">All eBooks ({products.length})</span>
           <span>
             <button
               id="dropdownMenuIconButton"
@@ -30,7 +50,9 @@ export const ProductsList = () => {
         </div>
 
         <div className="flex flex-wrap justify-center lg:flex-row">
-          <ProductCard />
+          {products.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </div>
       </section>
       {show && <FilterBar setShow={setShow} />}
