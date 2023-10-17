@@ -3,10 +3,13 @@ import Logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
 import { Search } from '../Sections/Search';
 import { DropdownLoggedOut } from '../index';
+import { DropdownLoggedIn } from '../index';
 export const Header = () => {
   const [darkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem('darkMode')) || false);
   const [searchSection, setSearchSection] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const token = JSON.parse(sessionStorage.getItem('token'));
+
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
     if (darkMode) {
@@ -46,7 +49,8 @@ export const Header = () => {
         </div>
       </nav>
       {searchSection && <Search setSearchSection={setSearchSection} />}
-      {dropdown && <DropdownLoggedOut />}
+      {dropdown &&
+        (token ? <DropdownLoggedIn setDropdown={setDropdown} /> : <DropdownLoggedOut setDropdown={setDropdown} />)}
     </header>
   );
 };

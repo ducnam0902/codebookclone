@@ -283,6 +283,18 @@
       "password": "$2a$10$K9aEH3/VDb2QU/EsjrHGJO7X5JxCcg0bMAnBtyT3kBW9FL7FnnygO",
       "name": "Shubham Sarda",
       "id": 1
+    },
+    {
+      "email": "a@gmail",
+      "password": "$2a$10$slu9MkFaomY./Z/uyI1/3e2ofu4lgcOFSR4wIr/w0qfu0Eeae2fAa",
+      "name": "Sh",
+      "id": 2
+    },
+    {
+      "email": "a@example.com",
+      "password": "$2a$10$XoORyRdtiYBgtHkxJ23p7u.QOfrQoY9VE0rRlwtzcQx11Rp4XZXiC",
+      "name": "a",
+      "id": 3
     }
   ]
 }
