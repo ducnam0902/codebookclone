@@ -1,9 +1,20 @@
 import { Link } from 'react-router-dom';
 import { Rating } from './Rating';
 import { useCart } from '../../context';
+import { useEffect, useState } from 'react';
 export const ProductCard = ({ product }) => {
   const { name, id, overview, price, image_local, rating, poster, best_seller } = product;
   const { cartList, addToCart, removeFromCart } = useCart();
+  const [inCart, setInCart] = useState(false);
+
+  useEffect(() => {
+    const productInCart = cartList.find(item => item.id === product.id);
+    if (productInCart) {
+      setInCart(true);
+    } else {
+      setInCart(false);
+    }
+  }, [cartList, product.id]);
 
   function handleClick(product) {
     addToCart(product);
@@ -30,15 +41,27 @@ export const ProductCard = ({ product }) => {
         <p className="flex justify-between items-center">
           <span className="text-2xl dark:text-gray-200">
             <span>$</span>
-            <span>29</span>
+            <span>{price}</span>
           </span>
-          <button
-            onClick={() => handleClick(product)}
-            className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800"
-          >
-            Add To Cart <i className="ml-1 bi bi-plus-lg"></i>
-          </button>
-          {/* <button className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800">Remove Item <i className="ml-1 bi bi-trash3"></i></button> */}
+          {!inCart ? (
+            <button
+              onClick={() => handleClick(product)}
+              disabled={product.in_stock ? '' : 'disabled'}
+              className={`inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800  ${
+                product.in_stock ? '' : 'cursor-not-allowed'
+              }`}
+            >
+              Add To Cart <i className="ml-1 bi bi-plus-lg"></i>
+            </button>
+          ) : (
+            <button
+              onClick={() => removeFromCart(product)}
+              disabled={product.in_stock ? '' : 'disabled'}
+              className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800"
+            >
+              Remove Item <i className="ml-1 bi bi-trash3"></i>
+            </button>
+          )}
         </p>
       </div>
     </div>
